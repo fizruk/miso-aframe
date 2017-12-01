@@ -1,5 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE RecordWildCards #-}
 module Main where
 
 import Data.Aeson
@@ -7,6 +8,7 @@ import GHC.Generics
 import GHCJS.Marshal
 import Miso.String
 
+import Miso (App(..), startApp, defaultEvents, noEff, onClick)
 import Miso.AFrame
 import Miso.AFrame.Core
 
@@ -241,5 +243,88 @@ step8 = startHtmlOnlyApp $
       ]
   ]
 
+-- ==========================================================
+-- Step 9. Using an Interactive Miso App
+-- ==========================================================
+
+data Model = Model
+  { modelText    :: MisoString
+  , modelPhrases :: [MisoString]
+  } deriving (Eq)
+
+data Action
+  = NextPhrase
+  | Reset
+
+step9 :: IO ()
+step9 = startApp App {..}
+  where
+    initialAction = Reset
+    events = defaultEvents
+    subs   = []
+
+    model  = Model "Click the box!" $
+      [ "You did it! Now click once again :)"
+      , "Not bad! Click more?"
+      , "Ok, I think that's enough."
+      , "Really, stop clicking on the box."
+      , "Ok. Let's play the repeating game."
+      ]
+
+    update Reset _ = noEff model
+    update NextPhrase m = case modelPhrases m of
+      [] -> noEff model
+      (new : rest) -> noEff m
+        { modelText    = new
+        , modelPhrases = rest
+        }
+
+    view Model{..} =
+      scene []
+      [
+        assets Nothing
+        [
+          img "boxTexture" "https://i.imgur.com/mYmmbrp.jpg"
+        ]
+      , box defaultBoxAttrs
+          { boxColor = Just "red"
+          , boxSrc   = Just "#boxTexture"
+          }
+          [ position (Vec3 0 2 (-5))
+          , rotation (Vec3 0 45 45)
+          , scale    (Vec3 2 2 2)
+          , onClick NextPhrase ]
+          [
+            animation "scale" Nothing (Vec3 2.3 2.3 2.3) defaultAnimationAttrs
+              { animationBegin = Just "mouseenter"
+              , animationDur   = Just 300
+              }
+          , animation "scale" Nothing (Vec3 2 2 2) defaultAnimationAttrs
+              { animationBegin = Just "mouseleave"
+              , animationDur   = Just 300
+              }
+          , animation "rotation" Nothing (Vec3 360 405 45) defaultAnimationAttrs
+              { animationBegin = Just "click"
+              , animationDur   = Just 2000
+              }
+          ]
+      , text modelText defaultTextAttrs
+          { textColor = Just (ColorName "black")
+          , textAlign = Just TextAlignmentCenter
+          }
+          [ position (Vec3 0 0.2 (-3))
+          , scale    (Vec3 1.5 1.5 1.5) ] []
+      , entity
+          [ environment Env
+            { preset      = "forest"
+            , numDressing = 500
+            }
+          ] []
+      , camera defaultCameraAttrs []
+          [
+            cursor defaultCursorAttrs [] []
+          ]
+      ]
+
 main :: IO ()
-main = step8
+main = step9
