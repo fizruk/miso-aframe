@@ -5,11 +5,13 @@
 -- | Haskell module declaration
 module Main where
 
+import Data.Function
+
 -- | Miso framework import
 import Miso
-import Miso.String (ms)
+import Miso.String (ms, MisoString)
 
-import Miso.AFrame
+import Miso.AFrame.Core
 
 type Model = ()
 type Action = ()
@@ -29,50 +31,72 @@ main = startApp App {..}
 updateModel :: Action -> Model -> Effect Action Model
 updateModel _ = noEff
 
-haskellLogo :: [[Char]]
+type AsciiImage = [[Char]]
+
+-- | Width-to-height aspect ratio for monofont used in ASCII images.
+asciiRatio :: Float
+asciiRatio = 0.7
+
+-- | Haskell logo.
+--
+-- @o@ — orange.
+-- @y@ — yellow.
+haskellLogo :: AsciiImage
 haskellLogo =
-  [ "aaaaaa   xxxxxxx                       "
-  , "  aaaaaa   xxxxxx                      "
-  , "   aaaaaa   xxxxxxx                    "
-  , "    aaaaaa   xxxxxxx                   "
-  , "      aaaaaa   xxxxxx   aaaaaaaaaaaaaaa"
-  , "       aaaaaa   xxxxxxx  aaaaaaaaaaaaaa"
-  , "        aaaaaa   xxxxxxx               "
-  , "        aaaaaa   xxxxxxxx              "
-  , "       aaaaaa   xxxxxxxxxxx   aaaaaaaaa"
-  , "      aaaaaa   xxxxxxxxxxxxx   aaaaaaaa"
-  , "    aaaaaa   xxxxxxx   xxxxxxx         "
-  , "   aaaaaa   xxxxxxx     xxxxxxx        "
-  , "  aaaaaa   xxxxxx        xxxxxxx       "
-  , "aaaaaa   xxxxxxx           xxxxxxx     "
+  [ "oooooo   yyyyyyy                       "
+  , "  oooooo   yyyyyy                      "
+  , "   oooooo   yyyyyyy                    "
+  , "    oooooo   yyyyyyy                   "
+  , "      oooooo   yyyyyy   ooooooooooooooo"
+  , "       oooooo   yyyyyyy  oooooooooooooo"
+  , "        oooooo   yyyyyyy               "
+  , "        oooooo   yyyyyyyy              "
+  , "       oooooo   yyyyyyyyyyy   ooooooooo"
+  , "      oooooo   yyyyyyyyyyyyy   oooooooo"
+  , "    oooooo   yyyyyyy   yyyyyyy         "
+  , "   oooooo   yyyyyyy     yyyyyyy        "
+  , "  oooooo   yyyyyy        yyyyyyy       "
+  , "oooooo   yyyyyyy           yyyyyyy     "
   ]
 
-asciiToVoxels :: [[Char]] -> [View action]
-asciiToVoxels ascii = concat $ do
-  (y, line) <- zip [0..] ascii
-  (x, char) <- zip [0..] line
-  return $ case char of
-    'x' -> return $ voxel x y "#FFB106"
-    'a' -> return $ voxel x y "#FF5900"
-    _ -> []
-  where
-    voxel i j c = box
-      [ position (s * (i - w)) (h - j) (-15)
-      , color c
-      , prop "width" (ms (show s))
-      ]
-      []
+voxelColor :: Char -> Maybe Color
+voxelColor 'o' = Just (ColorName "#FF5900")
+voxelColor 'y' = Just (ColorName "#FFB106")
+voxelColor _   = Nothing
 
-    s = 0.7   -- width:height aspect ration for ascii chars
-    w = width  / 2
-    h = height / 2
-    width  = fromIntegral $ maximum (map length ascii)
-    height = fromIntegral $ length ascii
+prop_ :: MisoString -> MisoString -> Attribute action
+prop_ = prop
+
+voxel :: Int -> Int -> Int -> Color -> View action
+voxel i j k c = box defaultBoxAttrs
+  { boxColor    = Just c
+  , boxWidth    = Just asciiRatio }
+  [ position (Vec3 x y z) ]
+  [ animation "scale" (Just (Vec3 0 0 0)) (Vec3 1 1 1) defaultAnimationAttrs
+        { animationDur       = Just 1000
+        , animationFill      = Just AnimationForwards
+        , animationRepeat    = Indefinite
+        , animationDirection = Just AnimationAlternate
+        } ]
+  where
+    x = fromIntegral i * asciiRatio
+    y = fromIntegral j
+    z = fromIntegral k
+
+asciiToVoxels :: AsciiImage -> [View action]
+asciiToVoxels ascii =
+  [ voxel (i - w) (h - j) (-15) c
+  | (j, line) <- zip [0..] ascii
+  , (i, char) <- zip [0..] line
+  , Just c <- [voxelColor char]
+  ]
+  where
+    h = length ascii `div` 2
+    w = maximum (map length ascii) `div` 2
 
 viewModel :: Model -> View Action
 viewModel _ = scene [] $
   asciiToVoxels haskellLogo ++
-  [ sky
-      [ color "#222222" ]
-      []
-  ]
+   [ sky defaultSkyAttrs { skyColor = Just (ColorName "#222")}
+     [] []
+   ]

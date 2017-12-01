@@ -1,39 +1,33 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Miso.AFrame (
-
-  module Miso.AFrame.Primitives,
-  module Miso.AFrame.Primitives.Attributes,
-  module Miso.AFrame.Primitives.Camera,
-  module Miso.AFrame.Primitives.Cursor,
-  module Miso.AFrame.Primitives.Light,
-
-  entity,
-  scene,
-
-  reloadAFrameApp,
-
-) where
+{-# LANGUAGE RecordWildCards #-}
+module Miso.AFrame where
 
 import Miso
 import Miso.String
 
-import Miso.AFrame.Primitives
-import Miso.AFrame.Primitives.Attributes
-import Miso.AFrame.Primitives.Camera
-import Miso.AFrame.Primitives.Cursor
-import Miso.AFrame.Primitives.Light
-
--- | An entity.
-entity :: [Attribute action] -> [View action] -> View action
-entity = node HTML "a-entity" Nothing
-
--- | A-Frame scene.
-scene :: [Attribute action] -> [View action] -> View action
-scene = node HTML "a-scene" Nothing
-
 foreign import javascript unsafe
   "(function(){ document.body.innerHTML = ''; })();"
   clearBody :: IO ()
+
+startHtmlOnlyApp :: View action -> IO ()
+startHtmlOnlyApp v = startApp App {..}
+  where
+    initialAction = ()
+    model  = ()
+    update = const noEff
+    view   = const (() <$ v)
+    events = defaultEvents
+    subs   = []
+
+startHtmlAndJSApp :: View action -> IO () -> IO ()
+startHtmlAndJSApp v js = startApp App {..}
+  where
+    initialAction = ()
+    model  = ()
+    update _ m = m <# js
+    view   = const (() <$ v)
+    events = defaultEvents
+    subs   = []
 
 -- | (Re)load GHCJS app from GHCJSi.
 --

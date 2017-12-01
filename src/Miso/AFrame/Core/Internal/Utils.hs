@@ -1,10 +1,12 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE PolyKinds #-}
+{-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE TypeFamilies #-}
-module Miso.AFrame.Core.Utils where
+module Miso.AFrame.Core.Internal.Utils where
 
 import Data.Maybe (catMaybes)
+import Data.List (intercalate)
 import Miso (node, prop, Attribute, View, NS(HTML))
 import Miso.String (MisoString, toMisoString)
 import GHCJS.Marshal (ToJSVal)
@@ -15,8 +17,13 @@ import Data.Aeson.Types (Options(..), defaultOptions)
 import qualified Data.HashMap.Strict as HashMap
 import GHC.Generics
 
+import Miso.AFrame.Core.Types
+
 node_ :: MisoString -> [Attribute action] -> [View action] -> View action
 node_ tag = node HTML tag Nothing
+
+primitive :: MisoString -> [Attribute action] -> Entity action
+primitive tag primitiveAttrs = node_ tag . (primitiveAttrs ++)
 
 attrsFromJSON :: ToJSON a => a -> [Attribute action]
 attrsFromJSON x = case toJSON x of
@@ -29,6 +36,10 @@ gtoJSON :: forall a d f. (Generic a, GToJSON (Rep a), Rep a ~ D1 d f, Datatype d
   => a -> Value
 gtoJSON = genericToJSON (jsonOptions (datatypeName (Proxy3 :: Proxy3 d f a)))
 
+gtoJSONPrimitive :: forall a d f. (Generic a, GToJSON (Rep a), Rep a ~ D1 d f, Datatype d)
+  => a -> Value
+gtoJSONPrimitive = genericToJSON (jsonOptionsPrimitive (datatypeName (Proxy3 :: Proxy3 d f a)))
+
 data Proxy3 d f a = Proxy3
 
 jsonOptions :: String -> Options
@@ -37,6 +48,17 @@ jsonOptions tname = defaultOptions
   , constructorTagModifier = stripCommonPrefixWords tname
   , omitNothingFields      = True
   }
+
+jsonOptionsPrimitive :: String -> Options
+jsonOptionsPrimitive tname = options
+  { fieldLabelModifier     = toKebabCase . fieldLabelModifier
+  , constructorTagModifier = toKebabCase . constructorTagModifier
+  }
+  where
+    options@Options{..} = jsonOptions tname
+
+toKebabCase :: String -> String
+toKebabCase = intercalate "-" . map (map toLower) . camelWords
 
 camelWords :: String -> [String]
 camelWords "" = []

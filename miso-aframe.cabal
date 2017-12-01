@@ -9,13 +9,21 @@ library
   hs-source-dirs:      src/
   exposed-modules:
     Miso.AFrame
+
+    Miso.AFrame.Core
     Miso.AFrame.Core.Animation
-    Miso.AFrame.Core.Utils
-    Miso.AFrame.Primitives
-    Miso.AFrame.Primitives.Attributes
-    Miso.AFrame.Primitives.Camera
-    Miso.AFrame.Primitives.Cursor
-    Miso.AFrame.Primitives.Light
+    Miso.AFrame.Core.Assets
+    Miso.AFrame.Core.Component
+    Miso.AFrame.Core.Components
+    Miso.AFrame.Core.Entity
+    Miso.AFrame.Core.Scene
+    Miso.AFrame.Core.System
+    Miso.AFrame.Core.Types
+    Miso.AFrame.Core.Internal.Utils
+
+    Miso.AFrame.Core.Primitives.Box
+    Miso.AFrame.Core.Primitives.Sphere
+    Miso.AFrame.Core.Primitives.Sky
   build-depends:
                 base,
                 ghcjs-base,
@@ -23,6 +31,15 @@ library
                 unordered-containers,
                 miso
   default-language: Haskell2010
+
+executable guide-basic-scene
+  hs-source-dirs:      examples/guide-basic-scene
+  main-is:             Main.hs
+  build-depends:
+    base,
+    miso-aframe,
+    miso
+  default-language:    Haskell2010
 
 executable hello-world
   hs-source-dirs:      examples/hello-world/

@@ -11,16 +11,8 @@ import Miso.String
 import GHCJS.Marshal (ToJSVal(..))
 import GHC.Generics (Generic)
 
-import Miso.AFrame.Core.Utils
-
-data Vec3 = Vec3 Float Float Float
-
-instance ToJSVal Vec3 where
-  toJSVal (Vec3 x y z) = toJSVal
-    (show x <> " " <> show y <> " " <> show z)
-
-newtype Milliseconds = Milliseconds Int
-  deriving (Eq, Num, ToJSON)
+import Miso.AFrame.Core.Types
+import Miso.AFrame.Core.Internal.Utils
 
 data AnimationRepeatCount
   = Finite Int
@@ -104,7 +96,7 @@ class ToJSVal a => CanAnimate a
 instance CanAnimate Vec3
 instance CanAnimate Bool
 instance CanAnimate Float
--- instance CanAnimate Color
+instance CanAnimate Color
 
 -- | A-Frame animation entity.
 animation
