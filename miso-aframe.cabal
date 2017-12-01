@@ -19,7 +19,7 @@ library
     miso
   default-language: Haskell2010
 
-executable miso-aframe-hello-world
+executable hello-world
   hs-source-dirs:      examples/hello-world/
   main-is:             Main.hs
   build-depends:
@@ -28,7 +28,7 @@ executable miso-aframe-hello-world
     miso
   default-language:    Haskell2010
 
-executable miso-aframe-haskell-logo-voxels
+executable haskell-logo-voxels
   hs-source-dirs:      examples/haskell-logo-voxels/
   main-is:             Main.hs
   build-depends:

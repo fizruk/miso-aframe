@@ -1,11 +1,22 @@
 #!/bin/sh
 
+set -e
+set -x
+
+# example project name
+name=$1
+
+# always run from a directory this script is in
 cd $(dirname $0)
 
-example=$1
+# find out where GHCJS /lib/etc files are located
+GHCJS_LIB_ETC_PATH=$(dirname $(stack path --global-pkg-db))
 
-bin_path="$(stack path --local-install-root)/bin/miso-aframe-${example}.jsexe"
+# replace irunner.js to enable static file server
+cp ghcjs/lib/etc/irunner.js ${GHCJS_LIB_ETC_PATH}/irunner.js
 
-stack build "miso-aframe:miso-aframe-${example}" \
-  && cp -f examples/${example}/index.html ${bin_path}/. \
-  && open ${bin_path}/index.html
+# specify a directory to serve static files from
+export GHCJSI_STATIC_DIR=$(pwd)/examples/$name/static
+
+# run GHCJSi
+stack ghci miso-aframe:lib miso-aframe:exe:$name
