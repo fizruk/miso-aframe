@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
 module Miso.AFrame.Core.Primitives.Sphere where
 
 import Data.Aeson (ToJSON(..), Value)
@@ -29,6 +30,7 @@ data SphereAttrs = SphereAttrs
   , sphereNormalTextureRepeat            :: Maybe Vec2
   , spherePhiLength                      :: Maybe Float
   , spherePhiStart                       :: Maybe Float
+  , sphereRadius                         :: Maybe Float
   , sphereRepeat                         :: Maybe Vec2
   , sphereRoughness                      :: Maybe Float
   , sphereSegmentsDepth                  :: Maybe Float
@@ -65,6 +67,7 @@ defaultSphereAttrs = SphereAttrs
   , sphereNormalTextureRepeat            = Nothing
   , spherePhiLength                      = Nothing
   , spherePhiStart                       = Nothing
+  , sphereRadius                         = Nothing
   , sphereRepeat                         = Nothing
   , sphereRoughness                      = Nothing
   , sphereSegmentsDepth                  = Nothing

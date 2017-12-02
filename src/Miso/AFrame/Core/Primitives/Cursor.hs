@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
 module Miso.AFrame.Core.Primitives.Cursor where
 
 import Data.Aeson (ToJSON(..), Value)

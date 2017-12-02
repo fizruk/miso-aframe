@@ -1,4 +1,5 @@
 {-# LANGUAGE DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings #-}
 module Miso.AFrame.Core.Primitives.Sky where
 
 import Data.Aeson

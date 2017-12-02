@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Miso.AFrame.Core.Entity where
 
 import Miso (Attribute, View)

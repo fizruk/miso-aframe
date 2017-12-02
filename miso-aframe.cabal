@@ -22,8 +22,11 @@ library
     Miso.AFrame.Core.Internal.Utils
 
     Miso.AFrame.Core.Primitives.Box
+    Miso.AFrame.Core.Primitives.Camera
+    Miso.AFrame.Core.Primitives.Cursor
     Miso.AFrame.Core.Primitives.Sphere
     Miso.AFrame.Core.Primitives.Sky
+    Miso.AFrame.Core.Primitives.Text
   build-depends:
                 base,
                 ghcjs-base,
@@ -37,6 +40,8 @@ executable guide-basic-scene
   main-is:             Main.hs
   build-depends:
     base,
+    ghcjs-base,
+    aeson,
     miso-aframe,
     miso
   default-language:    Haskell2010

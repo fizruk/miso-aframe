@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Miso.AFrame.Core.Scene where
 
 import Miso (Attribute, View)
