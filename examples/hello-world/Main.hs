@@ -6,9 +6,7 @@
 -- | Haskell module declaration
 module Main where
 
--- | Miso framework import
 import Miso
-import Miso.String
 
 import Miso.AFrame
 import Miso.AFrame.Core

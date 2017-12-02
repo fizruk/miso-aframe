@@ -17,7 +17,6 @@ library
     Miso.AFrame.Core.Components
     Miso.AFrame.Core.Entity
     Miso.AFrame.Core.Scene
-    Miso.AFrame.Core.System
     Miso.AFrame.Core.Types
     Miso.AFrame.Core.Internal.Utils
 

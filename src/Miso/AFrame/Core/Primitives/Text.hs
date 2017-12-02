@@ -4,7 +4,7 @@ module Miso.AFrame.Core.Primitives.Text where
 
 import Data.Aeson (ToJSON(..), Value)
 import GHC.Generics (Generic)
-import Miso
+import Miso (prop)
 import Miso.String (MisoString)
 
 import Miso.AFrame.Core.Types

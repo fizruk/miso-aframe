@@ -3,7 +3,6 @@
 module Miso.AFrame where
 
 import Miso
-import Miso.String
 
 foreign import javascript unsafe
   "(function(){ document.body.innerHTML = ''; })();"
@@ -13,6 +12,7 @@ startHtmlOnlyApp :: View action -> IO ()
 startHtmlOnlyApp v = startApp App {..}
   where
     initialAction = ()
+    mountPoint = Nothing
     model  = ()
     update = const noEff
     view   = const (() <$ v)
@@ -23,6 +23,7 @@ startHtmlAndJSApp :: View action -> IO () -> IO ()
 startHtmlAndJSApp v js = startApp App {..}
   where
     initialAction = ()
+    mountPoint = Nothing
     model  = ()
     update _ m = m <# js
     view   = const (() <$ v)

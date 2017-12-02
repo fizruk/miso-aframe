@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Miso.AFrame.Core.Entity where
 
-import Miso (Attribute, View)
+import Miso (View)
 import Miso.String (MisoString)
 import GHCJS.Types (JSVal)
 import JavaScript.Array (JSArray, toList)
@@ -23,4 +23,4 @@ selectEntities query =
   toList <$> documentQuerySelector query
 
 addChildNode :: View action -> Entity action -> Entity action
-addChildNode child entity attrs = entity attrs . (child :)
+addChildNode child ent attrs = ent attrs . (child :)

@@ -2,14 +2,13 @@
 module Miso.AFrame.Core.Component where
 
 import Control.Monad (join)
-import Data.Aeson (object)
 import GHCJS.Types
 import GHCJS.Foreign (jsNull)
 import GHCJS.Foreign.Callback
 import GHCJS.Marshal.Pure (PToJSVal(..))
 import GHCJS.Marshal (ToJSVal(..), fromJSVal)
 import JavaScript.Array
-import Miso (Attribute, prop)
+import Miso (prop)
 import Miso.String (MisoString)
 
 import Miso.AFrame.Core.Types
@@ -88,7 +87,7 @@ registerComponent name ComponentDefinition{..} = join $ aframeRegisterComponent
   where
     componentTick' jsT jsDT = do
       Just  t <- fromJSVal jsT
-      Just dt <- fromJSVal jsT
+      Just dt <- fromJSVal jsDT
       componentTick t dt
 
 foreignComponent :: ToJSVal a => MisoString -> a -> Component action

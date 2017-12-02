@@ -7,7 +7,6 @@ module Miso.AFrame.Core (
   module Miso.AFrame.Core.Component,
   module Miso.AFrame.Core.Entity,
   module Miso.AFrame.Core.Scene,
-  module Miso.AFrame.Core.System,
 
   -- ** Components
   module Miso.AFrame.Core.Components,
@@ -28,7 +27,6 @@ import Miso.AFrame.Core.Assets
 import Miso.AFrame.Core.Component
 import Miso.AFrame.Core.Entity
 import Miso.AFrame.Core.Scene
-import Miso.AFrame.Core.System
 
 import Miso.AFrame.Core.Components
 

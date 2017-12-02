@@ -261,6 +261,7 @@ step9 :: IO ()
 step9 = startApp App {..}
   where
     initialAction = Reset
+    mountPoint = Nothing
     events = defaultEvents
     subs   = []
 

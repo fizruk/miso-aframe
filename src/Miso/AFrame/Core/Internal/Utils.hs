@@ -5,11 +5,9 @@
 {-# LANGUAGE TypeFamilies #-}
 module Miso.AFrame.Core.Internal.Utils where
 
-import Data.Maybe (catMaybes)
 import Data.List (intercalate)
 import Miso (node, prop, Attribute, View, NS(HTML))
 import Miso.String (MisoString, toMisoString)
-import GHCJS.Marshal (ToJSVal)
 
 import Data.Char (isUpper, toUpper, toLower)
 import Data.Aeson (ToJSON(..), Value(..), GToJSON, genericToJSON)

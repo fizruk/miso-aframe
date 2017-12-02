@@ -4,7 +4,6 @@ module Miso.AFrame.Core.Primitives.Sphere where
 
 import Data.Aeson (ToJSON(..), Value)
 import GHC.Generics (Generic)
-import Miso
 
 import Miso.AFrame.Core.Types
 import Miso.AFrame.Core.Internal.Utils

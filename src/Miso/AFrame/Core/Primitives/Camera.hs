@@ -2,9 +2,8 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Miso.AFrame.Core.Primitives.Camera where
 
-import Data.Aeson (ToJSON(..), Value)
+import Data.Aeson (ToJSON(..))
 import GHC.Generics (Generic)
-import Miso
 
 import Miso.AFrame.Core.Types
 import Miso.AFrame.Core.Internal.Utils

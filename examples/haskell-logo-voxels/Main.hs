@@ -2,15 +2,12 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE RecordWildCards #-}
 
--- | Haskell module declaration
 module Main where
 
-import Data.Function
+import Miso (Effect, noEff, Attribute, prop, View)
+import Miso.String (MisoString)
 
--- | Miso framework import
-import Miso
-import Miso.String (ms, MisoString)
-
+import Miso.AFrame
 import Miso.AFrame.Core
 
 type Model = ()
@@ -18,14 +15,7 @@ type Action = ()
 
 -- | Entry point for a miso application
 main :: IO ()
-main = startApp App {..}
-  where
-    initialAction = ()            -- initial action to be executed on application load
-    model  = ()                   -- initial model
-    update = updateModel          -- update function
-    view   = viewModel            -- view function
-    events = defaultEvents        -- default delegated events
-    subs   = []                   -- empty subscription list
+main = startHtmlOnlyApp view
 
 -- | Updates model, optionally introduces side effects
 updateModel :: Action -> Model -> Effect Action Model
@@ -94,8 +84,8 @@ asciiToVoxels ascii =
     h = length ascii `div` 2
     w = maximum (map length ascii) `div` 2
 
-viewModel :: Model -> View Action
-viewModel _ = scene [] $
+view :: View action
+view = scene [] $
   asciiToVoxels haskellLogo ++
    [ sky defaultSkyAttrs { skyColor = Just (ColorName "#222")}
      [] []
