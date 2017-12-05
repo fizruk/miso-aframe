@@ -1,6 +1,6 @@
 # miso-aframe
 
-Miso bindings for A-Frame framework for WebVR.
+Miso bindings for [A-Frame framework](https://aframe.io/) for WebVR.
 
 ![Haskell logo in VR mode](images/haskell-logo-voxels-vr.jpg)
 
