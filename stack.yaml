@@ -13,3 +13,30 @@ setup-info:
       ghcjs-0.2.0.9006020_ghc-7.10.3:
         url: http://ghcjs.tolysz.org/lts-6.20-9006020.tar.gz
         sha1: a6cea90cd8121eee3afb201183c6e9bd6bacd94a
+
+# This is a Docker container configuration which is optional to use
+#
+# For Stack to use this configuration you will need to
+#
+# 1) install Docker and have it running
+# 2) stack docker pull  # to pull necessary Docker image
+# 3) pass --docker to the otherwise normal stack command, e.g.
+#    stack build --docker
+docker:
+  # do not use this configuration by default
+  # use --docker to enable it
+  enable: false
+
+  # Docker image with GHCJS 0.2.0 built with GHC 7.10.3
+  # and with patched irunner.js
+  # and installed socket.io, filehandler and serve-static npm packages
+  repo: "fizruk/stack-ghcjs:lts-6.20-patched"
+
+  # to reuse GHCJS installed within the container
+  # we need to run as root (as is supposed for this container)
+  set-user: false
+
+  # some extra arguments to make GHCJSi work
+  run-args:
+    - "--publish=6401:6401" # make 6401 port usable from outside container
+    - "--network=bridge"    # becase --network=host does not work on Mac for some reason
