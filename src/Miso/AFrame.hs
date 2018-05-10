@@ -4,10 +4,6 @@ module Miso.AFrame where
 
 import Miso
 
-foreign import javascript unsafe
-  "(function(){ document.body.innerHTML = ''; })();"
-  clearBody :: IO ()
-
 startHtmlOnlyApp :: View action -> IO ()
 startHtmlOnlyApp v = startApp App {..}
   where
